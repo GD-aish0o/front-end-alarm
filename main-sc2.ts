@@ -12,6 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let alarmInterval: NodeJS.Timeout | null = null;
     let snoozeTimeout: NodeJS.Timeout | null = null;
 
+    // Hide snooze and stop buttons initially
+    snoozeButton.style.display = 'none';
+    stopButton.style.display = 'none';
+
     // Populate hours and minutes options
     function populateOptions() {
         for (let i = 1; i <= 12; i++) {
@@ -36,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const minutes = String(now.getMinutes()).padStart(2, '0');
         const seconds = String(now.getSeconds()).padStart(2, '0');
         currentTimeDisplay.textContent = `${hours}:${minutes}:${seconds}`;
-        
+
         if (alarmTime && `${hours}:${minutes}` === alarmTime) {
             triggerAlarm();
         }
@@ -44,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Trigger alarm function
     function triggerAlarm() {
+        console.log('Alarm triggered');
         if (alarmInterval) {
             clearInterval(alarmInterval);
         }
@@ -53,9 +58,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (alarmSound) {
             alarmSound.play();
         }
+        snoozeButton.style.display = 'block'; // Show snooze button
+        stopButton.style.display = 'block'; // Show stop button
         snoozeButton.disabled = false;
         stopButton.disabled = false;
-        alert('Alarm ringing! Monsoon Melody is playing.');
+        alert('Alarm ringing! Monsoon Melody is playing. 20s');
     }
 
     // Set alarm function
@@ -84,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Snooze alarm function
     function snoozeAlarm() {
+        console.log('Snooze button clicked');
         if (alarmSound) {
             alarmSound.pause();
             alarmSound.currentTime = 0; // Reset sound to the beginning
@@ -97,6 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Stop alarm function
     function stopAlarm() {
+        console.log('Stop button clicked');
         if (alarmSound) {
             alarmSound.pause();
             alarmSound.currentTime = 0; // Reset sound to the beginning
@@ -109,6 +118,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         snoozeButton.disabled = true;
         stopButton.disabled = true;
+        snoozeButton.style.display = 'none'; // Hide snooze button
+        stopButton.style.display = 'none'; // Hide stop button
         alarmTime = null;
         alert('Alarm stopped.');
     }
@@ -123,3 +134,4 @@ document.addEventListener('DOMContentLoaded', () => {
     updateTime();
     setInterval(updateTime, 1000); // Update time every second
 });
+

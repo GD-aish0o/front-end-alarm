@@ -10,6 +10,9 @@ document.addEventListener('DOMContentLoaded', function () {
     var alarmTime = null;
     var alarmInterval = null;
     var snoozeTimeout = null;
+    // Hide snooze and stop buttons initially
+    snoozeButton.style.display = 'none';
+    stopButton.style.display = 'none';
     // Populate hours and minutes options
     function populateOptions() {
         for (var i = 1; i <= 12; i++) {
@@ -38,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     // Trigger alarm function
     function triggerAlarm() {
+        console.log('Alarm triggered');
         if (alarmInterval) {
             clearInterval(alarmInterval);
         }
@@ -47,9 +51,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if (alarmSound) {
             alarmSound.play();
         }
+        snoozeButton.style.display = 'block'; // Show snooze button
+        stopButton.style.display = 'block'; // Show stop button
         snoozeButton.disabled = false;
         stopButton.disabled = false;
-        alert('Alarm ringing! Monsoon Melody is playing.');
+        alert('Alarm ringing! Monsoon Melody is playing. 20s');
     }
     // Set alarm function
     function setAlarm() {
@@ -76,6 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     // Snooze alarm function
     function snoozeAlarm() {
+        console.log('Snooze button clicked');
         if (alarmSound) {
             alarmSound.pause();
             alarmSound.currentTime = 0; // Reset sound to the beginning
@@ -88,6 +95,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     // Stop alarm function
     function stopAlarm() {
+        console.log('Stop button clicked');
         if (alarmSound) {
             alarmSound.pause();
             alarmSound.currentTime = 0; // Reset sound to the beginning
@@ -100,6 +108,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         snoozeButton.disabled = true;
         stopButton.disabled = true;
+        snoozeButton.style.display = 'none'; // Hide snooze button
+        stopButton.style.display = 'none'; // Hide stop button
         alarmTime = null;
         alert('Alarm stopped.');
     }
