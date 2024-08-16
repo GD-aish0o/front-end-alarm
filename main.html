@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monsoon Melody</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- the div is parent of all other elements in the webpage. -->
+    <div class="wrapper">
+        <!-- add an svg of a clock -->
+        <img src="/assets/clockSVG.svg" alt="clock-svg">
+        <!-- time display -->
+        <h1 id="current-time">12:44:20</h1>
+
+        <!-- this div contains the content of the main page. -->
+        <div class="content">
+            <div class="column">
+                <!-- this select lets the user select an Hour -->
+                <select id="hour-select">
+                    <option value="" selected hidden>hh</option>
+                    <!-- Hour options dynamically populated with JavaScript -->
+                </select>
+            </div>
+
+            <!-- this is for minutes -->
+            <div class="column">
+                <select id="minute-select">
+                    <option value="" selected hidden>mm</option>
+                    <!-- Minute options dynamically populated with JavaScript -->
+                </select>
+            </div>
+
+            <!-- this is for Time-of-the-day am/pm -->
+            <div class="column">
+                <select id="ampm-select">
+                    <option value="" selected hidden>AM/PM</option>
+                    <option value="AM">AM</option>
+                    <option value="PM">PM</option>
+                </select>
+            </div>
+        </div>
+        <button id="set-alarm">Set Alarm</button>
+    </div>
+
+    <!-- importing scripts -->
+    <script src="script-main.js"></script>
+
+    <audio src="/assets/alarm-tone-ogg.mp3" id="alarm-sound" preload="auto"></audio>
+</body>
+</html>

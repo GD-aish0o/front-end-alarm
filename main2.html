@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monsoon Melody</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- the div is parent of all other element in the webpage. -->
+    <div class="wrapper">
+        <!-- add an svg of a clock -->
+        <img src="/assets/clockSVG.svg" alt="clock-svg">
+        <!-- time -->
+        <h1 id="current-time">12:44:20</h1>
+
+        <!-- this div contains the content of mainpage. -->
+        <div class="content">
+            <div class="column">
+                <!-- this select lets the user to select a Hour -->
+                <select id="hour-select">
+                    <option value="" selected hidden>hh</option>
+                    <!-- Options will be populated by JavaScript -->
+                </select>
+            </div>
+
+            <!-- this is for minutes -->
+            <div class="column">
+                <select id="minute-select">
+                    <option value="" selected hidden>mm</option>
+                    <!-- Options will be populated by JavaScript -->
+                </select>
+            </div>
+
+            <!-- this is for Time-of-the-day am/pm -->
+            <div class="column">
+                <select id="ampm-select">
+                    <option value="" selected hidden> AM/PM</option>
+                    <option value="AM">AM</option>
+                    <option value="PM">PM</option>
+                </select>
+            </div>
+
+            <!-- Buttons to set alarm, snooze, and stop alarm -->
+            <div class="controls">
+                <button id="set-alarm">Set Alarm</button>
+                <button id="snooze-alarm" disabled>Snooze</button>
+                <button id="stop-alarm" disabled>Stop</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio element -->
+    <audio id="alarm-sound" src="/assets/alarm-tone-ogg.mp3" preload="auto"></audio>
+
+    <!-- importing scripts -->
+    <script src="/main-sc2.js"></script>
+</body>
+</html>

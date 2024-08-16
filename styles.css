@@ -1,0 +1,79 @@
+/* import  a  nice font online  */
+
+/* import here */
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: /* imported font name here,*/  Tahoma;
+}
+
+body, .wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body{
+    min-height: 100dvh;
+    background: burlywood;
+}
+
+.wrapper{
+    /* max-width: fit-content; */
+    background-color: beige;
+    border-radius: 10px;
+    flex-direction: column;
+    width: 440px;
+    padding: 30px 30px 38px;
+}
+
+.wrapper img{
+    max-width: 103px;
+}
+
+.wrapper h1{
+    font-size: 38px;
+    font-weight: 500;
+    margin: 30px 0;
+}
+
+.wrapper .content{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.content .column{
+    border: 3px solid brown;
+    border-radius: 5px;
+    width: calc(100% / 3 - 5px);
+    /* divides 100 by 3 and decreases 5px from answer */
+    padding: 0 10px;
+}
+
+.column select{
+    outline: none;
+    border: none;
+    height: 53px;
+    width: 100%;
+}
+
+/* resize font of option elements from 19px upto 28*/
+
+/* Hour, minute, not-chosen */
+
+.wrapper button{
+    width: 100%;
+    margin-top: 20px;
+    outline: none;
+    border: 10px solid rgrb(248,201,130);
+    font-size: 20px;
+    padding: 17px 0;
+    border-radius: 5px;
+    background-color: blanchedalmond;
+    color: brown;
+    font-weight: 600;
+    cursor: pointer;
+}
