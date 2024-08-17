@@ -1,21 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Get references to DOM elements
-    // DOM === Document object model. programming interface for html
-    const hourSelect = document.getElementById('hour-select') as HTMLSelectElement;
-    const minuteSelect = document.getElementById('minute-select') as HTMLSelectElement;
-    const ampmSelect = document.getElementById('ampm-select') as HTMLSelectElement;
-    const currentTimeDisplay = document.getElementById('current-time') as HTMLHeadingElement;
-    const setAlarmButton = document.getElementById('set-alarm') as HTMLButtonElement;
-    const snoozeButton = document.getElementById('snooze') as HTMLButtonElement;
-    const stopButton = document.getElementById('stop') as HTMLButtonElement;
-    const alarmSound = document.getElementById('alarm-sound') as HTMLAudioElement;
+    const hourSelect = document.getElementById("hour-select") as HTMLSelectElement;
+    const minuteSelect = document.getElementById("minute-select") as HTMLSelectElement;
+    const ampmSelect = document.getElementById("ampm-select") as HTMLSelectElement;
+    const setAlarmButton = document.getElementById("set-alarm") as HTMLButtonElement;
+    const snoozeButton = document.getElementById("snooze") as HTMLButtonElement;
+    const stopButton = document.getElementById("stop") as HTMLButtonElement;
+    const customAlert = document.getElementById("custom-alert") as HTMLElement;
+    const alertMessage = document.getElementById("alert-message") as HTMLElement;
+    const alertOkButton = document.getElementById("alert-ok-button") as HTMLButtonElement;
+    const alarmSound = document.getElementById("alarm-sound") as HTMLAudioElement;
+    const currentTimeDisplay = document.getElementById("current-time") as HTMLElement;
+    const alarmTimeDisplay = document.getElementById("alarm-time-display") as HTMLElement;
 
-    // Variables to store the alarm time, interval for checking time, and timeout for snooze
-    let alarmTime: string | null = null;
-    let alarmInterval: NodeJS.Timeout | null = null;
-    let snoozeTimeout: NodeJS.Timeout | null = null;
+    // Variables to track alarm state
+    let alarmTime: string | null = null; // Stores the set alarm time
+    let alarmInterval: NodeJS.Timeout | null = null; // Interval to check the current time
+    let snoozeTimeout: NodeJS.Timeout | null = null; // Timeout for snooze functionality
+    let alarmTimeout: NodeJS.Timeout | null = null; // Timeout to stop the alarm after 30 seconds
 
-    // Hide snooze and stop buttons initially
+    // Initially hide the snooze and stop buttons
     snoozeButton.style.display = 'none';
     stopButton.style.display = 'none';
 
@@ -44,8 +48,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
         const seconds = String(now.getSeconds()).padStart(2, '0');
-        currentTimeDisplay.textContent = `${hours}:${minutes}:${seconds}`;
-        
+        if (currentTimeDisplay) {
+            currentTimeDisplay.textContent = `${hours}:${minutes}:${seconds}`;
+        }
+
         // Check if current time matches the alarm time
         if (alarmTime && `${hours}:${minutes}` === alarmTime) {
             triggerAlarm();
@@ -58,19 +64,25 @@ document.addEventListener('DOMContentLoaded', () => {
         if (alarmInterval) {
             clearInterval(alarmInterval);
         }
+
         // Clear any existing snooze timeouts
         if (snoozeTimeout) {
             clearTimeout(snoozeTimeout);
         }
+
         // Play the alarm sound
         if (alarmSound) {
             alarmSound.play();
         }
-        // Show snooze and stop buttons
+
+        // Show the snooze and stop buttons
         snoozeButton.style.display = 'block';
         stopButton.style.display = 'block';
-        // Alert the user that the alarm is ringing
-        alert('Alarm ringing! Monsoon Melody is playing.');
+
+        // Set a timeout to stop the alarm after 30 seconds if no action is taken
+        alarmTimeout = setTimeout(() => {
+            stopAlarm();
+        }, 30 * 1000); // 30 seconds timeout
     }
 
     // Function to set the alarm based on user input
@@ -88,11 +100,15 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (ampm === 'AM' && hour === '12') {
                 alarmTime = `00:${minute}`;
             }
-            // Notify the user that the alarm is set
-            alert(`Alarm set for ${hour}:${minute} ${ampm}`);
+
+            // Display the set alarm time
+            if (alarmTimeDisplay) {
+                alarmTimeDisplay.textContent = `Alarm is set for ${hour}:${minute} ${ampm}`;
+            }
         } else {
-            // Alert the user if any input is missing
-            alert('Please select a valid time.');
+            if (alarmTimeDisplay) {
+                alarmTimeDisplay.textContent = 'Please select a valid time.';
+            }
             return;
         }
 
@@ -100,8 +116,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (alarmInterval) {
             clearInterval(alarmInterval);
         }
+
         // Set an interval to check the time every second
         alarmInterval = setInterval(updateTime, 1000);
+
+        // Reset snooze and stop button states
+        snoozeButton.style.display = 'none';
+        stopButton.style.display = 'none';
+        snoozeButton.disabled = false;
+        stopButton.disabled = false;
     }
 
     // Function to snooze the alarm for 5 minutes
@@ -111,15 +134,25 @@ document.addEventListener('DOMContentLoaded', () => {
             alarmSound.pause();
             alarmSound.currentTime = 0;
         }
+
         // Disable the snooze and stop buttons during the snooze period
         snoozeButton.disabled = true;
         stopButton.disabled = true;
+
+        // Clear the 30-second timeout to stop the alarm
+        if (alarmTimeout) {
+            clearTimeout(alarmTimeout);
+        }
+
         // Set a timeout to trigger the alarm again after 5 minutes
         snoozeTimeout = setTimeout(() => {
             triggerAlarm();
-        }, 5 * 60 * 1000); // Snooze for 5 minutes
-        // Notify the user that the alarm is snoozed
-        alert('Alarm snoozed for 5 minutes.');
+        }, 5*60*1000); // Snooze for 5 minutes
+
+        // Update alarm time display
+        if (alarmTimeDisplay) {
+            alarmTimeDisplay.textContent = 'Alarm snoozed for 5 minutes.';
+        }
     }
 
     // Function to stop the alarm
@@ -129,6 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
             alarmSound.pause();
             alarmSound.currentTime = 0;
         }
+
         // Clear the interval and any snooze timeouts
         if (alarmInterval) {
             clearInterval(alarmInterval);
@@ -136,19 +170,30 @@ document.addEventListener('DOMContentLoaded', () => {
         if (snoozeTimeout) {
             clearTimeout(snoozeTimeout);
         }
-        // Disable the snooze and stop buttons and hide them
+
+        // Clear the 30-second timeout to stop the alarm
+        if (alarmTimeout) {
+            clearTimeout(alarmTimeout);
+        }
+
+        // Disable and hide the snooze and stop buttons
         snoozeButton.disabled = true;
         stopButton.disabled = true;
         snoozeButton.style.display = 'none';
         stopButton.style.display = 'none';
-        // Reset the alarm time to null
+
+        // Reset the alarm time
         alarmTime = null;
-        // Notify the user that the alarm is stopped
-        alert('Alarm stopped.');
+
+        // Update alarm time display
+        if (alarmTimeDisplay) {
+            alarmTimeDisplay.textContent = 'Alarm stopped.';
+        }
     }
 
     // Initialize the hour and minute options
     populateOptions();
+
     // Add event listeners for the set, snooze, and stop buttons
     setAlarmButton.addEventListener('click', setAlarm);
     snoozeButton.addEventListener('click', snoozeAlarm);
@@ -156,6 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial call to display the current time immediately
     updateTime();
+
     // Update the time display every second
     setInterval(updateTime, 1000);
 });
