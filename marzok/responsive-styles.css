@@ -22,6 +22,15 @@ body {
 
 /* styles of the analog clock starts here */
 
+#three{
+  transform: translate(85px, 83px);
+}
+
+#nine{
+  transform: translate(-85px, 83px);
+}
+
+
 .clock {
   position: relative;
   width: 60vw;
